@@ -45,84 +45,93 @@ class Scraper:
 
         while interval < interval_count:
 
-            for x, url in enumerate(prod_tracker_URLS):
-                page = requests.get(url, headers=self.HEADERS)
-                soup = BeautifulSoup(page.content, features="lxml")
+            # for x, url in enumerate(prod_tracker_URLS):
+            # page = requests.get(url, headers=self.HEADERS)
+            page = requests.get(
+                "https://www.amazon.com/NETGEAR-16-Port-Gigabit-Ethernet-Unmanaged/dp/B08CQL5B87/?_encoding=UTF8"
+                "&pd_rd_w=rH5t4&content-id=amzn1.sym.bc5f3394-3b4c-4031-8ac0-18107ac75816&pf_rd_p=bc5f3394-3b4c"
+                "-4031-8ac0-18107ac75816&pf_rd_r=81N8RK57S3ZZTZVB3B3D&pd_rd_wg=jjxeN&pd_rd_r=e86b61d4-0fea-4887"
+                "-862c-c6147c6f2ae1&ref_=pd_gw_ci_mcx_mr_hp_atf_m",
+                headers=self.HEADERS)
+            soup = BeautifulSoup(page.content, features="lxml")
 
-                # product title
-                title = soup.find(id='productTitle').get_text().strip()
+            # page = requests.get("https://www.amazon.com/NETGEAR-16-Port-Gigabit-Ethernet-Unmanaged/dp/B08CQL5B87
+            # /?_encoding=UTF8&pd_rd_w=rH5t4&content-id=amzn1.sym.bc5f3394-3b4c-4031-8ac0-18107ac75816&pf_rd_p
+            # =bc5f3394-3b4c-4031-8ac0-18107ac75816&pf_rd_r=81N8RK57S3ZZTZVB3B3D&pd_rd_wg=jjxeN&pd_rd_r=e86b61d4-0fea
+            # -4887-862c-c6147c6f2ae1&ref_=pd_gw_ci_mcx_mr_hp_atf_m", headers=self.HEADERS) product title
+            title = soup.find(id='productTitle').get_text().strip()
 
-                # to prevent script from crashing when there isn't a price for the product
+            # to prevent script from crashing when there isn't a price for the product
+            try:
+                price = float(
+                    soup.find(id='priceblock_ourprice').get_text().replace('.', '').replace('€', '').replace(',',
+                                                                                                             '.').strip())
+            except:
+                # this part gets the price in dollars from amazon.com store
                 try:
                     price = float(
-                        soup.find(id='priceblock_ourprice').get_text().replace('.', '').replace('€', '').replace(',',
-                                                                                                                 '.').strip())
+                        soup.find(id='priceblock_saleprice').get_text().replace('$', '').replace(',', '').strip())
                 except:
-                    # this part gets the price in dollars from amazon.com store
-                    try:
-                        price = float(
-                            soup.find(id='priceblock_saleprice').get_text().replace('$', '').replace(',', '').strip())
-                    except:
-                        price = ''
+                    price = ''
 
+            try:
+                review_score = float(
+                    soup.select('i[class*="a-icon a-icon-star a-star-"]')[0].get_text().split(' ')[0].replace(",",
+                                                                                                              "."))
+                review_count = int(
+                    soup.select('#acrCustomerReviewText')[0].get_text().split(' ')[0].replace(".", ""))
+            except:
+                # sometimes review_score is in a different position... had to add this alternative with another try statement
                 try:
                     review_score = float(
-                        soup.select('i[class*="a-icon a-icon-star a-star-"]')[0].get_text().split(' ')[0].replace(",",
-                                                                                                                  "."))
+                        soup.select('i[class*="a-icon a-icon-star a-star-"]')[1].get_text().split(' ')[0].replace(
+                            ",",
+                            "."))
                     review_count = int(
                         soup.select('#acrCustomerReviewText')[0].get_text().split(' ')[0].replace(".", ""))
                 except:
-                    # sometimes review_score is in a different position... had to add this alternative with another try statement
-                    try:
-                        review_score = float(
-                            soup.select('i[class*="a-icon a-icon-star a-star-"]')[1].get_text().split(' ')[0].replace(
-                                ",",
-                                "."))
-                        review_count = int(
-                            soup.select('#acrCustomerReviewText')[0].get_text().split(' ')[0].replace(".", ""))
-                    except:
-                        review_score = ''
-                        review_count = ''
+                    review_score = ''
+                    review_count = ''
 
-                # checking if there is "Out of stock"
+            # checking if there is "Out of stock"
+            try:
+                soup.select('#availability .a-color-state')[0].get_text().strip()
+                stock = 'Out of Stock'
+            except:
+                # checking if there is "Out of stock" on a second possible position
                 try:
-                    soup.select('#availability .a-color-state')[0].get_text().strip()
+                    soup.select('#availability .a-color-price')[0].get_text().strip()
                     stock = 'Out of Stock'
                 except:
-                    # checking if there is "Out of stock" on a second possible position
-                    try:
-                        soup.select('#availability .a-color-price')[0].get_text().strip()
-                        stock = 'Out of Stock'
-                    except:
-                        # if there is any error in the previous try statements, it means the product is available
-                        stock = 'Available'
+                    # if there is any error in the previous try statements, it means the product is available
+                    stock = 'Available'
 
-                log = pd.DataFrame({'date': now.replace('h', ':').replace('m', ''),
-                                    'code': prod_tracker.code[x],  # this code comes from the TRACKER_PRODUCTS file
-                                    'url': url,
-                                    'title': title,
-                                    'buy_below': prod_tracker.buy_below[x],
-                                    # this price comes from the TRACKER_PRODUCTS file
-                                    'price': price,
-                                    'stock': stock,
-                                    'review_score': review_score,
-                                    'review_count': review_count}, index=[x])
+            log = pd.DataFrame({'date': now.replace('h', ':').replace('m', ''),
+                                'code': prod_tracker.code[x],  # this code comes from the TRACKER_PRODUCTS file
+                                'url': url,
+                                'title': title,
+                                'buy_below': prod_tracker.buy_below[x],
+                                # this price comes from the TRACKER_PRODUCTS file
+                                'price': price,
+                                'stock': stock,
+                                'review_score': review_score,
+                                'review_count': review_count}, index=[x])
 
-                try:
-                    # This is where you can integrate an email alert!
-                    if price < prod_tracker.buy_below[x]:
-                        print(
-                            '************************ ALERT! Buy the ' + prod_tracker.code[
-                                x] + ' ************************')
-                        Messenger.sendMessage("The " + prod_tracker.code[x] + " has reached your target price")
+            try:
+                # This is where you can integrate an email alert!
+                if price < prod_tracker.buy_below[x]:
+                    print(
+                        '************************ ALERT! Buy the ' + prod_tracker.code[
+                            x] + ' ************************')
+                    Messenger.sendMessage("The " + prod_tracker.code[x] + " has reached your target price")
 
-                except:
-                    # sometimes we don't get any price, so there will be an error in the if condition above
-                    pass
+            except:
+                # sometimes we don't get any price, so there will be an error in the if condition above
+                pass
 
-                tracker_log = tracker_log.append(log)
-                print('appended ' + prod_tracker.code[x] + '\n' + title + '\n\n')
-                sleep(5)
+            tracker_log = tracker_log.append(log)
+            print('appended ' + prod_tracker.code[x] + '\n' + title + '\n\n')
+            sleep(5)
 
             interval += 1  # counter update
 

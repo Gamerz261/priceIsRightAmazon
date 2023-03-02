@@ -14,7 +14,7 @@ purple = "\033[38;5;20m"
 
 def main(argv):
     # Initialize variables for use in running the proper method for encrypting or decrypting the password
-
+    client = Scraper()
     # Takes in arguments from the command line
     try:
         opts, args = getopt.getopt(argv, "ht:")
@@ -51,7 +51,7 @@ def main(argv):
 
         print(1)
         if run:
-            Scraper.search_product_list(repeats, interval)
+            client.search_product_list(int(repeats), int(interval))
 
 
 if __name__ == '__main__':
