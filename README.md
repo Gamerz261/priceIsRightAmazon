@@ -13,7 +13,7 @@ cmd line
 
 ## Dependencies
 
-You might need to pip install xlrd because we work with excel also. Or you can change the output to csv as well.
+You might need to `pip install xlrd` because we work with excel also. Or you can change the output to csv as well.
 
 ```
 BeautifulSoup
