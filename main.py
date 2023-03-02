@@ -33,7 +33,7 @@ def main(argv):
             run = False
             mode.append(opt)
         # Accept manual override for num repeats and intervals
-        elif opt in "-t":
+        if opt in "-t":
             print("accepting override")
 
             Trepeats = input(pink + "Please input the number of times you would like the program to repeat: ")
