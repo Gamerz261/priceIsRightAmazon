@@ -14,28 +14,28 @@ class Scraper:
 
 
     def search_product_list(self, interval_count, interval_hours):
-        """
-        This function lods a csv file named TRACKER_PRODUCTS.csv, with headers: [url, code, buy_below]
-        It looks for the file under in ./trackers
-
-        It also requires a file called SEARCH_HISTORY.xslx under the folder ./search_history to start saving the results.
-        An empty file can be used on the first time using the script.
-
-        Both the old and the new results are then saved in a new file named SEARCH_HISTORY_{datetime}.xlsx
-        This is the file the script will use to get the history next time it runs.
-
-        Parameters
-        ----------
-        interval_count : TYPE, optional
-            DESCRIPTION. The default is 1. The number of iterations you want the script to run a search on the full list.
-        interval_hours : TYPE, optional
-            DESCRIPTION. The default is 6.
-
-        Returns
-        -------
-        New .xlsx file with previous search history and results from current search
-
-        """
+        # """
+        # This function lods a csv file named TRACKER_PRODUCTS.csv, with headers: [url, code, buy_below]
+        # It looks for the file under in ./trackers
+        #
+        # It also requires a file called SEARCH_HISTORY.xslx under the folder ./search_history to start saving the results.
+        # An empty file can be used on the first time using the script.
+        #
+        # Both the old and the new results are then saved in a new file named SEARCH_HISTORY_{datetime}.xlsx
+        # This is the file the script will use to get the history next time it runs.
+        #
+        # Parameters
+        # ----------
+        # interval_count : TYPE, optional
+        #     DESCRIPTION. The default is 1. The number of iterations you want the script to run a search on the full list.
+        # interval_hours : TYPE, optional
+        #     DESCRIPTION. The default is 6.
+        #
+        # Returns
+        # -------
+        # New .xlsx file with previous search history and results from current search
+        #
+        # """
         prod_tracker = pd.read_csv('trackers/TRACKER_PRODUCTS.csv', sep=';')
         prod_tracker_URLS = prod_tracker.url
         tracker_log = pd.DataFrame()
@@ -109,7 +109,7 @@ class Scraper:
                     if price < prod_tracker.buy_below[x]:
                         print(
                             '************************ ALERT! Buy the ' + prod_tracker.code[x] + ' ************************')
-                            Messenger.sendMessage("The " + prod_tracker.code[x] + " has reached your target price")
+                        Messenger.sendMessage("The " + prod_tracker.code[x] + " has reached your target price")
 
                 except:
                     # sometimes we don't get any price, so there will be an error in the if condition above
@@ -124,10 +124,11 @@ class Scraper:
             sleep(interval_hours * 1 * 1)
             print('end of interval ' + str(interval))
 
-        # after the run, checks last search history record, and appends this run results to it, saving a new file
-        last_search = glob('./search_history/*.xlsx')[-1]  # path to file in the folder
-        search_hist = pd.read_excel(last_search)
-        final_df = search_hist.append(tracker_log, sort=False)
 
-        final_df.to_excel('search_history/SEARCH_HISTORY_{}.xlsx'.format(now), index=False)
-        print('end of search')
+            # after the run, checks last search history record, and appends this run results to it, saving a new file
+            last_search = glob('./search_history/*.xlsx')[-1]  # path to file in the folder
+            search_hist = pd.read_excel(last_search)
+            final_df = search_hist.append(tracker_log, sort=False)
+
+            final_df.to_excel('search_history/SEARCH_HISTORY_{}.xlsx'.format(now), index=False)
+            print('end of search')
