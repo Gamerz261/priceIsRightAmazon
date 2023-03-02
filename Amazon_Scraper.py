@@ -5,14 +5,14 @@ import pandas as pd
 from datetime import datetime
 from time import sleep
 
-def scrape(self, ic, ih):
+class Scraper:
     # http://www.networkinghowtos.com/howto/common-user-agent-list/
     HEADERS = ({'User-Agent':
                     'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36',
                 'Accept-Language': 'en-US, en;q=0.5'})
 
 
-    def search_product_list(interval_count=ic, interval_hours=ih):
+    def search_product_list(self, interval_count, interval_hours):
         """
         This function lods a csv file named TRACKER_PRODUCTS.csv, with headers: [url, code, buy_below]
         It looks for the file under in ./trackers
@@ -44,7 +44,7 @@ def scrape(self, ic, ih):
         while interval < interval_count:
 
             for x, url in enumerate(prod_tracker_URLS):
-                page = requests.get(url, headers=HEADERS)
+                page = requests.get(url, headers=self.HEADERS)
                 soup = BeautifulSoup(page.content, features="lxml")
 
                 # product title
