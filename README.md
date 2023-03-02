@@ -18,6 +18,6 @@ Make sure to read the article where I provide a basic overview.
 
 You might need to pip install xlrd because we work with excel also. Or you can change the output to csv as well.
 
-BeautifulSoup, requests, pandas, the usual!
+BeautifulSoup, requests, pandas
 
 The article with the project details can be found here: https://towardsdatascience.com/scraping-multiple-amazon-stores-with-python-5eab811453a8
