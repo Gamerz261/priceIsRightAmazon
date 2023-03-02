@@ -11,12 +11,13 @@ green = "\033[38;5;150m"
 blue = "\033[38;5;4m"
 purple = "\033[38;5;20m"
 
+
 def main(argv):
     # Initialize variables for use in running the proper method for encrypting or decrypting the password
 
     # Takes in arguments from the command line
     try:
-        opts, args = getopt.getopt(argv, "hrt:")
+        opts, args = getopt.getopt(argv, "ht:")
     except getopt.GetoptError:
 
         sys.exit(2)
@@ -25,20 +26,33 @@ def main(argv):
         # Set defaults, they get updated as the user updates them.
         repeats = 12
         interval = 6
+        run = True
 
-        if opt in ("-h"):
+        if opt in "-h":
             print(blue + "Syntax: " + white + "python3 main.py [-i (integer)]")
+            run = False
             mode.append(opt)
-        elif opt in "-r":
-            mode.append(opt)
-            print(pink + "Please input the number of times you would like the program to repeat: ")
-            repeats = input()
+        # Accept manual override for num repeats and intervals
         elif opt in "-t":
+            print("accepting override")
+
+            Trepeats = input(pink + "Please input the number of times you would like the program to repeat: ")
+            Tinterval = input(pink + "Please input the number of hours in between each interval: ")
+            if Trepeats is not None:
+                repeats = Trepeats
+            else:
+                print('Going with default value 12')
+
+            if Tinterval is not None:
+                interval = Tinterval
+            else:
+                print('Going with default value 6')
             mode.append(opt)
-            print(pink + "Please input the hours in between each cycle")
-            interval = input()
-        # When all the data is collected from the user, run the program.
-        Scraper.search_product_list(repeats, interval)
+
+        print(1)
+        if run:
+            Scraper.search_product_list(repeats, interval)
+
 
 if __name__ == '__main__':
     main(sys.argv[1:])
