@@ -16,7 +16,7 @@ def main(argv):
 
     # Takes in arguments from the command line
     try:
-        opts, args = getopt.getopt(argv, "hmsdfbx:")
+        opts, args = getopt.getopt(argv, "hrt:")
     except getopt.GetoptError:
 
         sys.exit(2)
@@ -33,7 +33,7 @@ def main(argv):
             mode.append(opt)
             print(pink + "Please input the number of times you would like the program to repeat: ")
             repeats = input()
-        elif opt in "-h":
+        elif opt in "-t":
             mode.append(opt)
             print(pink + "Please input the hours in between each cycle")
             interval = input()

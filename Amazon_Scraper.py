@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 import pandas as pd
 from datetime import datetime
 from time import sleep
+from messenger import Messenger
 
 class Scraper:
     # http://www.networkinghowtos.com/howto/common-user-agent-list/
@@ -108,6 +109,7 @@ class Scraper:
                     if price < prod_tracker.buy_below[x]:
                         print(
                             '************************ ALERT! Buy the ' + prod_tracker.code[x] + ' ************************')
+                            Messenger.sendMessage("The " + prod_tracker.code[x] + " has reached your target price")
 
                 except:
                     # sometimes we don't get any price, so there will be an error in the if condition above
@@ -129,6 +131,3 @@ class Scraper:
 
         final_df.to_excel('search_history/SEARCH_HISTORY_{}.xlsx'.format(now), index=False)
         print('end of search')
-
-
-    search_product_list()
