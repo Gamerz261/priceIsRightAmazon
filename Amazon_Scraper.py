@@ -6,20 +6,21 @@ from datetime import datetime
 from time import sleep
 from messenger import Messenger
 
+
 class Scraper:
     # http://www.networkinghowtos.com/howto/common-user-agent-list/
     HEADERS = ({'User-Agent':
-                    'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36',
+                    'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 '
+                    'Safari/537.36',
                 'Accept-Language': 'en-US, en;q=0.5'})
-
 
     def search_product_list(self, interval_count, interval_hours):
         # """
         # This function lods a csv file named TRACKER_PRODUCTS.csv, with headers: [url, code, buy_below]
         # It looks for the file under in ./trackers
         #
-        # It also requires a file called SEARCH_HISTORY.xslx under the folder ./search_history to start saving the results.
-        # An empty file can be used on the first time using the script.
+        # It also requires a file called SEARCH_HISTORY.xslx under the folder ./search_history to start saving the
+        # results. An empty file can be used on the first time using the script.
         #
         # Both the old and the new results are then saved in a new file named SEARCH_HISTORY_{datetime}.xlsx
         # This is the file the script will use to get the history next time it runs.
@@ -66,14 +67,17 @@ class Scraper:
 
                 try:
                     review_score = float(
-                        soup.select('i[class*="a-icon a-icon-star a-star-"]')[0].get_text().split(' ')[0].replace(",", "."))
-                    review_count = int(soup.select('#acrCustomerReviewText')[0].get_text().split(' ')[0].replace(".", ""))
+                        soup.select('i[class*="a-icon a-icon-star a-star-"]')[0].get_text().split(' ')[0].replace(",",
+                                                                                                                  "."))
+                    review_count = int(
+                        soup.select('#acrCustomerReviewText')[0].get_text().split(' ')[0].replace(".", ""))
                 except:
                     # sometimes review_score is in a different position... had to add this alternative with another try statement
                     try:
                         review_score = float(
-                            soup.select('i[class*="a-icon a-icon-star a-star-"]')[1].get_text().split(' ')[0].replace(",",
-                                                                                                                      "."))
+                            soup.select('i[class*="a-icon a-icon-star a-star-"]')[1].get_text().split(' ')[0].replace(
+                                ",",
+                                "."))
                         review_count = int(
                             soup.select('#acrCustomerReviewText')[0].get_text().split(' ')[0].replace(".", ""))
                     except:
@@ -108,7 +112,8 @@ class Scraper:
                     # This is where you can integrate an email alert!
                     if price < prod_tracker.buy_below[x]:
                         print(
-                            '************************ ALERT! Buy the ' + prod_tracker.code[x] + ' ************************')
+                            '************************ ALERT! Buy the ' + prod_tracker.code[
+                                x] + ' ************************')
                         Messenger.sendMessage("The " + prod_tracker.code[x] + " has reached your target price")
 
                 except:
@@ -123,7 +128,6 @@ class Scraper:
 
             sleep(interval_hours * 1 * 1)
             print('end of interval ' + str(interval))
-
 
             # after the run, checks last search history record, and appends this run results to it, saving a new file
             last_search = glob('./search_history/*.xlsx')[-1]  # path to file in the folder
