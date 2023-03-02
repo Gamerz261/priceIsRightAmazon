@@ -23,4 +23,4 @@ pandas
 
 ## Credit Where Credit is Due
 
-This is a fork a repository. For the original, please see https://towardsdatascience.com/scraping-multiple-amazon-stores-with-python-5eab811453a8
+This is a fork a repository. Why? because ya boi doesn't get HTML, and furthermore, likes when the code works from the start, and all I need to change is the functionality. For the original, please see https://towardsdatascience.com/scraping-multiple-amazon-stores-with-python-5eab811453a8
