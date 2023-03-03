@@ -43,9 +43,10 @@ def main(argv):
 
         if run:
             url = input(red + "MAIN :: " + pink + "Please type in the Amazon url: " + white)
+            path = input(red + "MAIN :: " + pink + "Please paste the abs path: " + white)
             # Loop it
             while True:
-                client.search_product_list(target, url)
+                client.search_product_list(target, url, path)
                 time.sleep(5 * 60)
 
 

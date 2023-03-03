@@ -14,7 +14,7 @@ class Scraper:
     driver = webdriver.Chrome(options=chromeOptions)
 
     # --- search_product_list takes in a target price and a url and finds the price --- #
-    def search_product_list(self, target, url):
+    def search_product_list(self, target, url, path):
         # Color codes for console
         white = "\033[38;5;252m"
         pink = "\033[38;5;5m"
@@ -28,7 +28,7 @@ class Scraper:
         # Load the url into the browser
         self.driver.get(url)
         # Locate the position of the price based on where it's typically located
-        a = self.driver.find_element('xpath', "/html[1]/body[1]/div[1]/div[3]/div[9]/div[6]/div[1]/div[4]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/h5[1]/div[2]/div[1]/div[1]/div[1]/span[1]/span[1]")
+        a = self.driver.find_element('xpath', path)
         # The price returns with a $ in front of it, so we remove it here
         parsedPrice = str(a.get_attribute('innerHTML'))[1:]
         print(green + "SELENIUM :: " + white + "Found price: " + purple + parsedPrice)
