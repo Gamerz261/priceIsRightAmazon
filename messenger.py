@@ -13,9 +13,18 @@ class Messenger:
         self.client = Client(self.TWILIO_ACCOUNT_SID, self.TWILIO_AUTH_TOKEN)
 
     def sendMessage(self, message):
+        # Color codes for console
+        white = "\033[38;5;252m"
+        pink = "\033[38;5;5m"
+        red = "\033[38;5;1m"
+        orange = "\033[38;5;3m"
+        green = "\033[38;5;150m"
+        blue = "\033[38;5;4m"
+        purple = "\033[38;5;20m"
+
         self.client.messages.create(
             body=message,
             from_=self.TWILIO_PHONE_NUMBER,
             to=self.DESTINATION_PHONE_NUMBER
         )
-        print('TWILIO :: Notification sent!')
+        print(orange + 'TWILIO :: ' + white + 'Notification sent!')

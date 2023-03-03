@@ -1,5 +1,8 @@
 import sys, getopt
+import time
+
 from Amazon_Scraper import Scraper
+from time import sleep
 
 mode = []
 
@@ -16,6 +19,7 @@ def main(argv):
     # Initialize variables for use in running the proper method for encrypting or decrypting the password
     client = Scraper()
     # Takes in arguments from the command line
+    userIn = str(sys.argv[len(sys.argv) - 1]).encode('utf-8')
     try:
         opts, args = getopt.getopt(argv, "ht:")
     except getopt.GetoptError:
@@ -24,7 +28,7 @@ def main(argv):
     for opt, arg in opts:
 
         # Set defaults, they get updated as the user updates them.
-        repeats = 12
+        target = 0
         interval = 6
         run = True
 
@@ -34,24 +38,17 @@ def main(argv):
             mode.append(opt)
         # Accept manual override for num repeats and intervals
         if opt in "-t":
-            print("accepting override")
+            target = float(userIn)
+            print(red + "MAIN :: " +blue + "Target price set as " + str(target))
 
-            Trepeats = input(pink + "Please input the number of times you would like the program to repeat: ")
-            Tinterval = input(pink + "Please input the number of hours in between each interval: ")
-            if Trepeats is not None:
-                repeats = Trepeats
-            else:
-                print('Going with default value 12')
-
-            if Tinterval is not None:
-                interval = Tinterval
-            else:
-                print('Going with default value 6')
             mode.append(opt)
 
-        print(1)
         if run:
-            client.search_product_list(int(repeats), int(interval))
+            url = input(red + "MAIN :: " + pink + "Please type in the Amazon url: " + white)
+            # Loop it
+            while True:
+                client.search_product_list(target, url)
+                time.sleep(30)
 
 
 if __name__ == '__main__':
