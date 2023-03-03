@@ -5,22 +5,20 @@ Coded with <3 by Stephen Cupitt
 
 ## What am I?
 
-An Amazon price tracker! I grab the current pricing from Amazon, and I stash it in an excel file, and when the price gets to one that too cheap for you to pass up, I send you a text!
+An Amazon price grabber! you input your target price and the url you want to track and I refresh every 5 minutes and text you if it's below your threshold price!
 
-## Getting Started
+## Usage
 
-cmd line
+```
+python3 main.py -t (target price)
+```
+you can also do -h if you want to see this message 😁
 
 ## Dependencies
 
-You might need to `pip install xlrd` because we work with excel also. Or you can change the output to csv as well.
-
 ```
-BeautifulSoup
-requests
-pandas
+twilio
+sys
+getopt
+selenium
 ```
-
-## Credit Where Credit is Due
-
-This is a fork a repository. Why? because ya boi doesn't get HTML, and furthermore, likes when the code works from the start, and all I need to change is the functionality. For the original, please see https://towardsdatascience.com/scraping-multiple-amazon-stores-with-python-5eab811453a8
