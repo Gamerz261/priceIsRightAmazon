@@ -1,22 +1,32 @@
-import requests
-from glob import glob
-from bs4 import BeautifulSoup
-import pandas as pd
-from datetime import datetime
-from time import sleep
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from messenger import Messenger
 
 
 class Scraper:
+
+    # --- Define browser options, and run them on the calling of the class Scraper --- #
     chromeOptions = Options()
+    # For some reason this doesn't work on MacOS... if you're on windows it should work fine.
     # chromeOptions.add_argument("--headless")
     driver = webdriver.Chrome(options=chromeOptions)
 
-    def search_product_list(self, interval_count, interval_hours):
-
+    # --- search_product_list takes in a target price and a url and finds the price --- #
+    def search_product_list(self, target):
         url = "https://www.amazon.com/NETGEAR-16-Port-Gigabit-Ethernet-Unmanaged/dp/B08CQL5B87/?_encoding=UTF8&pd_rd_w=zM0gH&content-id=amzn1.sym.03bef33a-a357-4fe3-9505-7fd4d6236957&pf_rd_p=03bef33a-a357-4fe3-9505-7fd4d6236957&pf_rd_r=7P72JZ7K75SANCB4GZ39&pd_rd_wg=XTpfz&pd_rd_r=0061f9b6-3f19-4626-96b3-6d0cae83b5fe&ref_=pd_gw_ci_mcx_mr_hp_d&th=1"
+
+        # Load the url into the browser
         self.driver.get(url)
-        a = self.driver.find_element('xpath', "//span[@class='a-price a-text-normal aok-align-center reinventPriceAccordionT2']//span[@aria-hidden='true']//span[@class='a-price-whole'][contains(text(),'363')]")
-        print(a)
+        # Locate the position of the price based on where it's typically located
+        a = self.driver.find_element('xpath', "/html[1]/body[1]/div[1]/div[3]/div[9]/div[6]/div[1]/div[4]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/h5[1]/div[2]/div[1]/div[1]/div[1]/span[1]/span[1]")
+        # The price returns with a $ in front of it, so we remove it here
+        parsedPrice = str(a.get_attribute('innerHTML'))[1:]
+        print("SELENIUM :: Found price: " + parsedPrice)
+
+        # Determine if the parsedPrice is lower than the defined 'target' price
+        if float(parsedPrice) < target:
+            messageClient = Messenger()
+            messageClient.sendMessage("The listing for " + str(url) + " is now priced at " + str(a) + " which is lower than your target price " + str(target))
+            return parsedPrice
+        else:
+            return False
