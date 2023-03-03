@@ -2,7 +2,6 @@ import sys, getopt
 import time
 
 from Amazon_Scraper import Scraper
-from time import sleep
 
 mode = []
 
