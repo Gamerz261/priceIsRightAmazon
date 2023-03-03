@@ -15,10 +15,10 @@ class Messenger:
 
         msg = MIMEText(message)
         msg['Subject'] = "You're Amazon PriceTracker Notification"
-        msg['From'] = s2cupitt@gmail.com
+        msg['From'] = "s2cupitt@gmail.com"
         msg['To'] = recipient
         smtp_server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-        smtp_server.login(sender, password)
-        smtp_server.sendmail(sender, recipients, msg.as_string())
+        smtp_server.login("s2cupitt@gmail.com", "patchy dinghy storm heavily untoasted skype")
+        smtp_server.sendmail("s2cupitt@gmail.com", recipient, msg.as_string())
         smtp_server.quit()
-        print(orange + 'TWILIO :: ' + white + 'Notification sent!')
+        print(orange + 'SMTP :: ' + white + 'Notification sent!')
