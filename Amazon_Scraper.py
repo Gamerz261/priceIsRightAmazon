@@ -14,7 +14,7 @@ class Scraper:
     driver = webdriver.Chrome(options=chromeOptions)
 
     # --- search_product_list takes in a target price and a url and finds the price --- #
-    def search_product_list(self, target, url, path):
+    def search_product_list(self, target, url, path, recipient):
         # Color codes for console
         white = "\033[38;5;252m"
         pink = "\033[38;5;5m"
@@ -36,7 +36,7 @@ class Scraper:
         # Determine if the parsedPrice is lower than the defined 'target' price
         if float(parsedPrice) < target:
             messageClient = Messenger()
-            messageClient.sendMessage("The listing for " + str(url) + " is now priced at " + str(a) + " which is lower than your target price " + str(target))
+            messageClient.sendMessage("The listing for " + str(url) + " is now priced at " + str(a) + " which is lower than your target price " + str(target), recipient)
             return parsedPrice
         else:
             print(green + "SELENIUM :: " + white + "Price is not lower than target " + red + str(target))

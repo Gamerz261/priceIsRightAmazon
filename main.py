@@ -13,6 +13,7 @@ green = "\033[38;5;150m"
 blue = "\033[38;5;4m"
 purple = "\033[38;5;20m"
 
+recipient = "s2cupitt@gmail.com"
 
 def main(argv):
     # Initialize variables for use in running the proper method for encrypting or decrypting the password
@@ -46,7 +47,7 @@ def main(argv):
             path = input(red + "MAIN :: " + pink + "Please paste the abs path: " + white)
             # Loop it
             while True:
-                client.search_product_list(target, url, path)
+                client.search_product_list(target, url, path, recipient)
                 time.sleep(5 * 60)
 
 

@@ -1,18 +1,9 @@
-from twilio.rest import Client
-
+import smtplib, email
+from email.mime.text import MIMEText
 
 class Messenger:
-    TWILIO_ACCOUNT_SID = 'AC4d9c9e66bcbffc1f85019a23ab68ec1f'
-    TWILIO_AUTH_TOKEN = '9b816156b4a0c01275edb217abb18211'
-    TWILIO_PHONE_NUMBER = '+18445700369'
-    DESTINATION_PHONE_NUMBER = '+13463397625'
-    client = 0
 
-    def __init__(self):
-        # Initialize client as Twilio account
-        self.client = Client(self.TWILIO_ACCOUNT_SID, self.TWILIO_AUTH_TOKEN)
-
-    def sendMessage(self, message):
+    def sendMessage(self, message, recipient):
         # Color codes for console
         white = "\033[38;5;252m"
         pink = "\033[38;5;5m"
@@ -22,9 +13,12 @@ class Messenger:
         blue = "\033[38;5;4m"
         purple = "\033[38;5;20m"
 
-        self.client.messages.create(
-            body=message,
-            from_=self.TWILIO_PHONE_NUMBER,
-            to=self.DESTINATION_PHONE_NUMBER
-        )
+        msg = MIMEText(message)
+        msg['Subject'] = "You're Amazon PriceTracker Notification"
+        msg['From'] = s2cupitt@gmail.com
+        msg['To'] = recipient
+        smtp_server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+        smtp_server.login(sender, password)
+        smtp_server.sendmail(sender, recipients, msg.as_string())
+        smtp_server.quit()
         print(orange + 'TWILIO :: ' + white + 'Notification sent!')
