@@ -48,7 +48,7 @@ def main(argv):
             # Loop it
             while True:
                 client.search_product_list(target, url)
-                time.sleep(30)
+                time.sleep(5 * 60)
 
 
 if __name__ == '__main__':
