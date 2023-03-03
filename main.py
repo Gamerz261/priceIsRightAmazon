@@ -28,11 +28,10 @@ def main(argv):
 
         # Set defaults, they get updated as the user updates them.
         target = 0
-        interval = 6
         run = True
 
         if opt in "-h":
-            print(blue + "Syntax: " + white + "python3 main.py [-i (integer)]")
+            print(blue + "Syntax: " + white + "python3 main.py -t (target price)")
             run = False
             mode.append(opt)
         # Accept manual override for num repeats and intervals
