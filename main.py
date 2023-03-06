@@ -29,18 +29,19 @@ def main(argv):
 
         # Set defaults, they get updated as the user updates them.
         target = 0
-        run = True
+        run = False
 
         if opt in "-h":
             print(blue + "Syntax: " + white + "python3 main.py -t (target price)")
             run = False
             mode.append(opt)
-        # Accept manual override for num repeats and intervals
+        # Price Flag
         if opt in "-t":
             target = float(userIn)
             print(red + "MAIN :: " +blue + "Target price set as " + str(target))
 
             mode.append(opt)
+            run = True
 
         if run:
             url = input(red + "MAIN :: " + pink + "Please type in the Amazon url: " + white)
@@ -49,6 +50,8 @@ def main(argv):
             while True:
                 client.search_product_list(target, url, path, recipient)
                 time.sleep(5 * 60)
+        else:
+            print("You must input a target price!!")
 
 
 if __name__ == '__main__':
