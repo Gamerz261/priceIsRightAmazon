@@ -36,7 +36,7 @@ class Scraper:
         # Determine if the parsedPrice is lower than the defined 'target' price
         if float(parsedPrice) < target:
             messageClient = Messenger()
-            messageClient.sendMessage("The listing for " + str(url) + " is now priced at " + str(a) + " which is lower than your target price " + str(target), recipient)
+            messageClient.sendMessage("The listing for " + str(url) + " is now priced at $" + str(parsedPrice) + " which is lower than your target price " + str(target), recipient)
             return parsedPrice
         else:
             print(green + "SELENIUM :: " + white + "Price is not lower than target " + red + str(target))
